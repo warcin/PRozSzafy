@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DEFECTS>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>C:\Users\Ryba\Documents\Visual Studio 2019\Projects\PRozSzafy\</FILEPATH>
+      <FILENAME>structs.h</FILENAME>
+      <LINE>60</LINE>
+      <COLUMN>0</COLUMN>
+    </SFA>
+    <DEFECTCODE>26495</DEFECTCODE>
+    <DESCRIPTION>Zmienna „Data::rank” jest niezainicjowana. Zawsze inicjuj zmienną składową (type.6).</DESCRIPTION>
+    <FUNCTION>Data::{ctor}</FUNCTION>
+    <DECORATED>??0Data@@QEAA@XZ</DECORATED>
+    <FUNCLINE>60</FUNCLINE>
+    <ADDITIONALINFO>
+      <targetSymbol>Data::rank</targetSymbol>
+    </ADDITIONALINFO>
+    <PATH></PATH>
+  </DEFECT>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>C:\Users\Ryba\Documents\Visual Studio 2019\Projects\PRozSzafy\</FILEPATH>
+      <FILENAME>structs.h</FILENAME>
+      <LINE>60</LINE>
+      <COLUMN>0</COLUMN>
+    </SFA>
+    <DEFECTCODE>26495</DEFECTCODE>
+    <DESCRIPTION>Zmienna „Data::size” jest niezainicjowana. Zawsze inicjuj zmienną składową (type.6).</DESCRIPTION>
+    <FUNCTION>Data::{ctor}</FUNCTION>
+    <DECORATED>??0Data@@QEAA@XZ</DECORATED>
+    <FUNCLINE>60</FUNCLINE>
+    <ADDITIONALINFO>
+      <targetSymbol>Data::size</targetSymbol>
+    </ADDITIONALINFO>
+    <PATH></PATH>
+  </DEFECT>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>C:\Users\Ryba\Documents\Visual Studio 2019\Projects\PRozSzafy\</FILEPATH>
+      <FILENAME>structs.h</FILENAME>
+      <LINE>60</LINE>
+      <COLUMN>0</COLUMN>
+    </SFA>
+    <DEFECTCODE>26495</DEFECTCODE>
+    <DESCRIPTION>Zmienna „Data::state” jest niezainicjowana. Zawsze inicjuj zmienną składową (type.6).</DESCRIPTION>
+    <FUNCTION>Data::{ctor}</FUNCTION>
+    <DECORATED>??0Data@@QEAA@XZ</DECORATED>
+    <FUNCLINE>60</FUNCLINE>
+    <ADDITIONALINFO>
+      <targetSymbol>Data::state</targetSymbol>
+    </ADDITIONALINFO>
+    <PATH></PATH>
+  </DEFECT>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>C:\Users\Ryba\Documents\Visual Studio 2019\Projects\PRozSzafy\</FILEPATH>
+      <FILENAME>structs.h</FILENAME>
+      <LINE>60</LINE>
+      <COLUMN>0</COLUMN>
+    </SFA>
+    <DEFECTCODE>26495</DEFECTCODE>
+    <DESCRIPTION>Zmienna „Data::lamportTime” jest niezainicjowana. Zawsze inicjuj zmienną składową (type.6).</DESCRIPTION>
+    <FUNCTION>Data::{ctor}</FUNCTION>
+    <DECORATED>??0Data@@QEAA@XZ</DECORATED>
+    <FUNCLINE>60</FUNCLINE>
+    <ADDITIONALINFO>
+      <targetSymbol>Data::lamportTime</targetSymbol>
+    </ADDITIONALINFO>
+    <PATH></PATH>
+  </DEFECT>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>C:\Users\Ryba\Documents\Visual Studio 2019\Projects\PRozSzafy\</FILEPATH>
+      <FILENAME>structs.h</FILENAME>
+      <LINE>60</LINE>
+      <COLUMN>0</COLUMN>
+    </SFA>
+    <DEFECTCODE>26495</DEFECTCODE>
+    <DESCRIPTION>Zmienna „Data::roomDemand” jest niezainicjowana. Zawsze inicjuj zmienną składową (type.6).</DESCRIPTION>
+    <FUNCTION>Data::{ctor}</FUNCTION>
+    <DECORATED>??0Data@@QEAA@XZ</DECORATED>
+    <FUNCLINE>60</FUNCLINE>
+    <ADDITIONALINFO>
+      <targetSymbol>Data::roomDemand</targetSymbol>
+    </ADDITIONALINFO>
+    <PATH></PATH>
+  </DEFECT>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>C:\Users\Ryba\Documents\Visual Studio 2019\Projects\PRozSzafy\</FILEPATH>
+      <FILENAME>structs.h</FILENAME>
+      <LINE>60</LINE>
+      <COLUMN>0</COLUMN>
+    </SFA>
+    <DEFECTCODE>26495</DEFECTCODE>
+    <DESCRIPTION>Zmienna „Data::occupyingRoom” jest niezainicjowana. Zawsze inicjuj zmienną składową (type.6).</DESCRIPTION>
+    <FUNCTION>Data::{ctor}</FUNCTION>
+    <DECORATED>??0Data@@QEAA@XZ</DECORATED>
+    <FUNCLINE>60</FUNCLINE>
+    <ADDITIONALINFO>
+      <targetSymbol>Data::occupyingRoom</targetSymbol>
+    </ADDITIONALINFO>
+    <PATH></PATH>
+  </DEFECT>
+</DEFECTS>

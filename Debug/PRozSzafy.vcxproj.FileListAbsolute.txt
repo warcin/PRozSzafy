@@ -1,0 +1,2 @@
+C:\Users\Ryba\Documents\Visual Studio 2019\Projects\PRozSzafy\Debug\PRozSzafy.exe
+C:\Users\Ryba\Documents\Visual Studio 2019\Projects\PRozSzafy\Debug\PRozSzafy.pdb

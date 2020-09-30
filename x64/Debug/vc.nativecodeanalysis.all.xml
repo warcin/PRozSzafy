@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?><DEFECTS><DEFECT>
+    <SFA>
+      <FILEPATH>C:\Users\Ryba\Documents\Visual Studio 2019\Projects\PRozSzafy\</FILEPATH>
+      <FILENAME>structs.h</FILENAME>
+      <LINE>60</LINE>
+      <COLUMN>0</COLUMN>
+    </SFA>
+    <DEFECTCODE>26495</DEFECTCODE>
+    <DESCRIPTION>Zmienna „Data::rank” jest niezainicjowana. Zawsze inicjuj zmienną składową (type.6).</DESCRIPTION>
+    <FUNCTION>Data::{ctor}</FUNCTION>
+    <DECORATED>??0Data@@QEAA@XZ</DECORATED>
+    <FUNCLINE>60</FUNCLINE>
+    <ADDITIONALINFO>
+      <targetSymbol>Data::rank</targetSymbol>
+    </ADDITIONALINFO>
+    <PATH></PATH>
+  </DEFECT><DEFECT>
+    <SFA>
+      <FILEPATH>C:\Users\Ryba\Documents\Visual Studio 2019\Projects\PRozSzafy\</FILEPATH>
+      <FILENAME>structs.cpp</FILENAME>
+      <LINE>33</LINE>
+      <COLUMN>16</COLUMN>
+    </SFA>
+    <DEFECTCODE>26812</DEFECTCODE>
+    <DESCRIPTION>Typ wyliczeniowy „State” nie ma zakresu. Preferowany jest element „enum class” zamiast „enum” (enum.3).</DESCRIPTION>
+    <FUNCTION>Data::init</FUNCTION>
+    <DECORATED>?init@Data@@QEAAXHH@Z</DECORATED>
+    <FUNCLINE>32</FUNCLINE>
+    <PATH></PATH>
+  </DEFECT></DEFECTS>

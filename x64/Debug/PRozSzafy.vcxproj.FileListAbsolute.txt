@@ -1,0 +1,4 @@
+C:\Users\Ryba\Documents\Visual Studio 2019\Projects\PRozSzafy\x64\Debug\PRozSzafy.exe.lastcodeanalysissucceeded
+C:\Users\Ryba\Documents\Visual Studio 2019\Projects\PRozSzafy\x64\Debug\NativeCodeAnalysis.read.1.tlog
+C:\Users\Ryba\Documents\Visual Studio 2019\Projects\PRozSzafy\x64\Debug\PRozSzafy.exe
+C:\Users\Ryba\Documents\Visual Studio 2019\Projects\PRozSzafy\x64\Debug\PRozSzafy.pdb
