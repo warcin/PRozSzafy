@@ -20,7 +20,6 @@ extern Data datas; // full datas set for one process
 
 extern MPI_Datatype MPI_PACKET_T;
 
-void incLamportTime(int received);
 
 void lockStateMutex();
 void unlockStateMutex();

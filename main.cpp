@@ -75,11 +75,7 @@ void finalizeApp() {
     MPI_Finalize();
 }
 
-void incLamportTime(int received) {
-    if (received > datas.lamportTime)
-        datas.lamportTime = received;
-    ++datas.lamportTime;
-}
+
 
 void lockStateMutex() {
     pthread_mutex_lock(&stateMutex);

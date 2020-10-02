@@ -1,13 +1,15 @@
 ﻿#ifndef CONSTSH
 #define CONSTSH
 
-#define TUNNELS 2               // liczba tuneli
-#define X_CREW_SIZE 5           // wielkość ekipy
-#define P_TUNNEL_SIZE 12        // rozmiar tunelu
+#define ROOMS 2					// liczba pomieszczeń
+#define ELEVATORS 2				// liczba wind
+#define MAX_ROOMS 1				// maksymalna ilość używanych pomieszczeń przez proces
 
-#define STATE_CHANGE_PROB 30    // prawdopodobieństwo zmiany stanu
+#define STATE_CHANGE_PROB 30    // prawdopodobieństwo zmiany stanu IDLE (chęci wejścia do pokoju)
 #define SEC_IN_STATE 1          // liczba sekund spędzonych w jednym stanie
-#define MAX_SEC_IN_TUNNEL 5     // maksymalna liczba sekund spędzonych w tunelu
+#define SEC_IN_ELEVATOR 3		// liczba sekund spędzonych w windzie (musi być większe od SEC IN STATE)
+#define MIN_SEC_IN_ROOM 3		// minimalna liczba dodatkowych sekund spędzonych w pomieszczeniu (musi być większe od SEC IN STATE)
+#define MAX_SEC_IN_ROOM 5		// maksymalna liczba dodatkowych sekund spędzonych w pomieszczeniu (musi być większe od MIN SEC IN ROOM)
 #define LAMPORT_DEFAULT 0       // początkowa wartość zegara Lamporta
 
 #endif

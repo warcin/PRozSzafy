@@ -3,7 +3,10 @@
 void* commLoop(void* ptr) {
     MPI_Status status;
     packet_t packet;
-
+    packet_t* response = (packet_t*)malloc(sizeof(packet_t));
+    int senderLamportTime;
+    int senderRank;
+    int lamportTime;
     while (true) {
         MPI_Recv(&packet, 1, MPI_PACKET_T, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
 
@@ -11,19 +14,18 @@ void* commLoop(void* ptr) {
         case Message::CHECK_STATE:
             if (DEBUG) printf("received CHECK_STATE(time = %d, resourceCount = %d, resourceType = %d) from rank = %d \n", packet.lamportTime, packet.resourceCount, packet.resourceType, status.MPI_SOURCE);
             // variable for holding response lamport time at the end
-            int lamportTime;
+            
             // sender's lamport time for comparison
-            int senderLamportTime = packet.lamportTime;
-            int senderRank = status.MPI_SOURCE;
-
-            packet_t *response = (packet_t*)malloc(sizeof(packet_t));
+            senderLamportTime = packet.lamportTime;
+            senderRank = status.MPI_SOURCE;
+            
             response->resourceType = packet.resourceType;
 
             lockStateMutex();
             // update lamport time
             incLamportTime(packet.lamportTime);
             unlockStateMutex();
-            if (packet.resourceType = Resource::ROOM)
+            if (packet.resourceType == Resource::ROOM)
                 switch (datas.state) {
                     case State::INIT:
                         response->resourceCount = 0;
@@ -31,28 +33,52 @@ void* commLoop(void* ptr) {
                     case State::IDLE:
                         response->resourceCount = 0;
                         break;
+                    case State::IN_ELEVATOR:
+                        if(datas.occupyingRoom) //process is in elevator getting OUT of the room
+                            response->resourceCount = 0;
+                        else
+                            response->resourceCount = datas.roomDemand;
+                        break;
                     case State::SEARCHING_FOR_ROOM: 
-                        if (doWeHavePriority(senderRank, senderLamportTime, datas.requestTime))
+                        if (doWeHavePriority(senderRank, senderLamportTime, datas.requestTime)) {
                             response->resourceCount = datas.roomDemand;
                             //add them to release message list
+                            lockStateMutex();
+                            if (find(datas.roomReservations.begin(), datas.roomReservations.end(), status.MPI_SOURCE) == datas.roomReservations.end())
+                                datas.roomReservations.push_back(status.MPI_SOURCE);
+                            unlockStateMutex();
+                        }
                         else
                             response->resourceCount = 0;
                         break;
                     default:
                         response->resourceCount = datas.roomDemand;
                         //add them to release message list
+                        lockStateMutex();
+                        if(find(datas.roomReservations.begin(),datas.roomReservations.end(),status.MPI_SOURCE) == datas.roomReservations.end())
+                            datas.roomReservations.push_back(status.MPI_SOURCE);
+                        unlockStateMutex();
                         break;
                 }
             else
                 switch (datas.state) {
-                    case State::ELEVATOR:
+                    case State::IN_ELEVATOR:
                         response->resourceCount = 1;
                         //add them to release message list
+                        lockStateMutex();
+                        if (find(datas.elevatorReservations.begin(), datas.elevatorReservations.end(), status.MPI_SOURCE) == datas.elevatorReservations.end())
+                            datas.elevatorReservations.push_back(status.MPI_SOURCE);
+                        unlockStateMutex();
                         break;
                     case State::SEARCHING_FOR_ELEVATOR:
-                        if (doWeHavePriority(senderRank, senderLamportTime, datas.requestTime))
+                        if (doWeHavePriority(senderRank, senderLamportTime, datas.requestTime)) {
                             response->resourceCount = 1;
                             //add them to release message list
+                            lockStateMutex();
+                            if (find(datas.elevatorReservations.begin(), datas.elevatorReservations.end(), status.MPI_SOURCE) == datas.elevatorReservations.end())
+                                datas.elevatorReservations.push_back(status.MPI_SOURCE);
+                            unlockStateMutex();
+                        }
                         else
                             response->resourceCount = 0;
                         break;
@@ -82,8 +108,12 @@ void* commLoop(void* ptr) {
             lockStateMutex();
             // update lamport time
             incLamportTime(packet.lamportTime);
-            // store information in list
-            datas.knownOccupancies[status.MPI_SOURCE] = packet.resourceCount;
+            // store information in list, check if it's for current request
+            if(packet.lamportTime > datas.requestTime)
+                if(packet.resourceType==Resource::ROOM)
+                    datas.knownRoomOccupancies[status.MPI_SOURCE] = packet.resourceCount;
+                else
+                    datas.knownElevatorOccupancies[status.MPI_SOURCE] = packet.resourceCount;
             unlockStateMutex();
 
             break;

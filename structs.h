@@ -7,6 +7,8 @@
 
 using namespace std;
 
+void incLamportTime(int received);
+
 typedef struct {
     int lamportTime;
     int resourceCount;
@@ -22,7 +24,7 @@ enum State {
     INIT,
     SEARCHING_FOR_ROOM,
     SEARCHING_FOR_ELEVATOR,
-    ELEVATOR,
+    IN_ELEVATOR,
     OCCUPYING,
     IDLE
 };
@@ -32,15 +34,7 @@ enum Message {
     ANSWER_STATE
 };
 
-class Rooms {
-public:
-    vector<int> reservations;
-};
 
-class Elevators {
-public:
-    vector<int> reservations;
-};
 
 class Data {
 public:
@@ -49,13 +43,16 @@ public:
     int lamportTime;
     int requestTime;
     int roomDemand;
-    vector<int> knownOccupancies;
-    bool occupyingRoom;
-    Rooms rooms;
-    Elevators elevators;
+    vector<int> knownRoomOccupancies;
+    vector<int> knownElevatorOccupancies;
+    vector<int> roomReservations;
+    vector<int> elevatorReservations;
+    bool occupyingRoom; // information whether process wants to get in or out of the room
 
     void init(int rank, int size);
     void resetOccupancies();
+    void broadcastCheckState(int type);
+    void broadcastRelease(vector<int> recipents, int type);
 
 };
 
