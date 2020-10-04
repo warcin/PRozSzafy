@@ -3,7 +3,7 @@
 void* commLoop(void* ptr) {
     MPI_Status status;
     packet_t packet;
-    packet_t* response = (packet_t*)malloc(sizeof(packet_t));
+    packet_t* response;
     int senderLamportTime;
     int senderRank;
     int lamportTime;
@@ -12,13 +12,14 @@ void* commLoop(void* ptr) {
 
         switch (status.MPI_TAG) {
         case Message::CHECK_STATE:
-            if (DEBUG) printf("received CHECK_STATE(time = %d, resourceCount = %d, resourceType = %d) from rank = %d \n", packet.lamportTime, packet.resourceCount, packet.resourceType, status.MPI_SOURCE);
+            if (DEBUG) printf("%d - received CHECK_STATE(time = %d, resourceCount = %d, resourceType = %d) from rank = %d \n", datas.rank, packet.lamportTime, packet.resourceCount, packet.resourceType, status.MPI_SOURCE);
             // variable for holding response lamport time at the end
             
             // sender's lamport time for comparison
             senderLamportTime = packet.lamportTime;
             senderRank = status.MPI_SOURCE;
             
+            response = (packet_t*)malloc(sizeof(packet_t));
             response->resourceType = packet.resourceType;
 
             lockStateMutex();
@@ -98,12 +99,13 @@ void* commLoop(void* ptr) {
             response->lamportTime = lamportTime;
 
             // respond
-            MPI_Send(&response, 1, MPI_PACKET_T, status.MPI_SOURCE, Message::ANSWER_STATE, MPI_COMM_WORLD);
-            if (DEBUG) printf("send ANSWER_STATE(time = %d, resourceCount = %d, resourceType = %d) to rank = %d \n", response->lamportTime, response->resourceCount, response->resourceType, status.MPI_SOURCE);
+            MPI_Send(response, 1, MPI_PACKET_T, status.MPI_SOURCE, Message::ANSWER_STATE, MPI_COMM_WORLD);
+            if (DEBUG) printf("%d - send ANSWER_STATE(time = %d, resourceCount = %d, resourceType = %d) to rank = %d \n", datas.rank, response->lamportTime, response->resourceCount, response->resourceType, status.MPI_SOURCE);
+            free(response);
 
             break;
         case Message::ANSWER_STATE:
-            if (DEBUG) printf("receive ANSWER_STATE(time = %d, resourceCount = %d, resourceType = %d)  from rank = %d \n", packet.lamportTime, packet.resourceCount, packet.resourceType, status.MPI_SOURCE);
+            if (DEBUG) printf("%d - received ANSWER_STATE(time = %d, resourceCount = %d, resourceType = %d)  from rank = %d \n", datas.rank, packet.lamportTime, packet.resourceCount, packet.resourceType, status.MPI_SOURCE);
 
             lockStateMutex();
             // update lamport time
@@ -120,6 +122,6 @@ void* commLoop(void* ptr) {
         default:
             break;
         }
-
+        fflush(stdout);
     }
 }

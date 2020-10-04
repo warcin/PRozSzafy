@@ -3,15 +3,13 @@
 #include "structs.h"
 
 void mainLoop() {
-    if (DEBUG) printf("DEBUG: ON \n");
+    if (DEBUG) printf("%d - DEBUG: ON \n", datas.rank);
     int perc;
     int occupyingTime;
     int potentialRooms;
     int potentialElevators;
     bool broadcasted = false;
-    while (true) {
-
-
+    while (true){
         switch (datas.state) {
         case State::INIT:
             lockStateMutex();
@@ -21,8 +19,10 @@ void mainLoop() {
         case State::SEARCHING_FOR_ROOM:
             if (!broadcasted) {
                 lockStateMutex();
+                datas.resetOccupancies();
                 incLamportTime(LAMPORT_DEFAULT);
                 datas.broadcastCheckState(Resource::ROOM);
+                datas.requestTime = datas.lamportTime;
                 broadcasted = true;
                 unlockStateMutex();
             }
@@ -37,6 +37,7 @@ void mainLoop() {
                         potentialRooms -= datas.knownRoomOccupancies[i];
             unlockStateMutex();
             if (potentialRooms >= datas.roomDemand) {
+                if (DEBUG) printf("%d - Reserving %d rooms since there's at least %d left \n", datas.rank,datas.roomDemand,potentialRooms);
                 lockStateMutex();
                 datas.state = State::SEARCHING_FOR_ELEVATOR;
                 broadcasted = false;
@@ -46,8 +47,10 @@ void mainLoop() {
         case State::SEARCHING_FOR_ELEVATOR:
             if (!broadcasted) {
                 lockStateMutex();
+                datas.resetOccupancies();
                 incLamportTime(LAMPORT_DEFAULT);
                 datas.broadcastCheckState(Resource::ELEVATOR);
+                datas.requestTime = datas.lamportTime;
                 broadcasted = true;
                 unlockStateMutex();
             }
@@ -61,6 +64,7 @@ void mainLoop() {
                         potentialElevators -= datas.knownElevatorOccupancies[i];
 
             if (potentialElevators >= 1) {
+                if (DEBUG)printf("%d - Entering Elevator since there's at least %d left \n", datas.rank, potentialElevators);
                 lockStateMutex();
                 datas.state = State::IN_ELEVATOR;
                 broadcasted = false;
@@ -80,17 +84,21 @@ void mainLoop() {
                 datas.state = State::OCCUPYING;
                 datas.occupyingRoom = true;
             }
+            incLamportTime(LAMPORT_DEFAULT);
             datas.broadcastRelease(datas.elevatorReservations, Resource::ELEVATOR);
             datas.elevatorReservations.clear();
             unlockStateMutex();
             
             break;
         case State::OCCUPYING:
+            if (DEBUG)printf("%d - Using %d rooms  \n", datas.rank, datas.roomDemand);
             occupyingTime = rand() % (1 + MAX_SEC_IN_ROOM - MIN_SEC_IN_ROOM) + MIN_SEC_IN_ROOM;
             Sleep((occupyingTime - SEC_IN_STATE) * 1000);
             lockStateMutex();
+            if (DEBUG)printf("%d - Left %d rooms  \n", datas.rank, datas.roomDemand);
             datas.state = State::SEARCHING_FOR_ELEVATOR;
             broadcasted = false;
+            incLamportTime(LAMPORT_DEFAULT);
             datas.broadcastRelease(datas.roomReservations, Resource::ROOM);
             datas.roomReservations.clear();
             unlockStateMutex();
@@ -99,15 +107,17 @@ void mainLoop() {
             perc = rand() % 100;
             if (perc < STATE_CHANGE_PROB) {
                 lockStateMutex();
+                datas.roomDemand = rand() % MAX_ROOMS + 1;
                 datas.state = State::SEARCHING_FOR_ROOM;
                 broadcasted = false;
                 unlockStateMutex();
+                if (DEBUG)printf("%d - Searching for %d rooms \n", datas.rank, datas.roomDemand);
             }
             break;
         default:
             break;
         }
-
+        fflush(stdout);
         Sleep(SEC_IN_STATE*1000);
     }
 }

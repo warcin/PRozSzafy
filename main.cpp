@@ -11,7 +11,7 @@ pthread_t commThread;
 pthread_mutex_t stateMutex = PTHREAD_MUTEX_INITIALIZER;
 
 void check_thread_support(int provided) {
-    if (DEBUG) printf("THREAD SUPPORT: chcemy %d. Co otrzymamy?\n", provided);
+    if (DEBUG) printf("%d - THREAD SUPPORT: chcemy %d. Co otrzymamy?\n", datas.rank, provided);
     switch (provided) {
     case MPI_THREAD_SINGLE:
         if (DEBUG) printf("Brak wsparcia dla wątków, kończę\n");
@@ -48,7 +48,7 @@ void initType() {
 }
 
 void initApp(int* argc, char*** argv) {
-    if (DEBUG) printf("Application initialization...\n");
+    if (DEBUG) printf("%d - Application initialization...\n", datas.rank);
     int provided;
 
     MPI_Init_thread(argc, argv, MPI_THREAD_MULTIPLE, &provided);
@@ -66,7 +66,7 @@ void initApp(int* argc, char*** argv) {
     pthread_create(&commThread, NULL, commLoop, 0);
 
     Sleep(1000);
-    if (DEBUG) printf("Application ready \n");
+    if (DEBUG) printf("%d - Application ready \n", datas.rank);
 }
 
 void finalizeApp() {
@@ -86,6 +86,7 @@ void unlockStateMutex() {
 }
 
 int main(int argc, char** argv) {
+    printf("test\n");
     initApp(&argc, &argv);
     mainLoop();
     finalizeApp();

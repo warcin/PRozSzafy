@@ -23,7 +23,7 @@ void Data::init(int rank, int size) {
     this->state = State::INIT;
     this->rank = rank;
     this->size = size;
-    this->roomDemand = 1; // POTRZEBNA FUNKCJA LOSUJACA
+    this->roomDemand = 1;
     this->knownRoomOccupancies.resize(size, -1);
     this->knownElevatorOccupancies.resize(size, -1);
     this->roomReservations.clear();
@@ -49,12 +49,12 @@ void Data::broadcastCheckState(int type)
     packet->resourceCount = 0;
     packet->resourceType = type;
 
-    if (DEBUG) printf("broadcast CHECK_STATE(time = %d, resourceCount = %d, resourceType = %d) \n", packet->lamportTime, packet->resourceCount, packet->resourceType);
+    if (DEBUG) printf("%d - broadcast CHECK_STATE(time = %d, resourceCount = %d, resourceType = %d) \n",datas.rank, packet->lamportTime, packet->resourceCount, packet->resourceType);
     for (int i = 0; i < datas.size; ++i) {
         if (i != datas.rank)
             MPI_Send(packet, 1, MPI_PACKET_T, i, Message::CHECK_STATE, MPI_COMM_WORLD);
     }
-    
+    free(packet);
 }
 
 void Data::broadcastRelease(vector<int> recipents, int type)
@@ -64,11 +64,12 @@ void Data::broadcastRelease(vector<int> recipents, int type)
     packet->resourceCount = 0;
     packet->resourceType = type;
 
-    if (DEBUG) printf("broadcast ANSWER_STATE(time = %d, resourceCount = %d, resourceType = %d) to %d recipents \n", packet->lamportTime, packet->resourceCount, packet->resourceType, recipents.size());
+    if (DEBUG) printf("%d - broadcast ANSWER_STATE(time = %d, resourceCount = %d, resourceType = %d) to %zd recipents \n",datas.rank, packet->lamportTime, packet->resourceCount, packet->resourceType, recipents.size());
     for (int i = 0; i < recipents.size(); ++i) {
         if (recipents[i] != datas.rank)
             MPI_Send(packet, 1, MPI_PACKET_T, recipents[i], Message::ANSWER_STATE, MPI_COMM_WORLD);
     }
+    free(packet);
 }
 
 
