@@ -4,7 +4,7 @@
 
 #define ROOMS 4					// liczba pomieszczeń
 #define ELEVATORS 2				// liczba wind
-#define MAX_ROOMS 4				// maksymalna ilość używanych pomieszczeń przez proces
+#define MAX_ROOMS 3				// maksymalna ilość używanych pomieszczeń przez proces
 
 #define STATE_CHANGE_PROB 30    // prawdopodobieństwo zmiany stanu IDLE (chęci wejścia do pokoju)
 #define SEC_IN_STATE 1          // liczba sekund spędzonych w jednym stanie
@@ -16,6 +16,6 @@
 #endif
 
 #ifndef DEBUG
-#define DEBUG true
+#define DEBUG true // czy chcemy printf'y o stanie
 
 #endif

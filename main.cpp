@@ -10,8 +10,9 @@ Data datas;
 pthread_t commThread;
 pthread_mutex_t stateMutex = PTHREAD_MUTEX_INITIALIZER;
 
+// lawlessly stolen from project skeleton
 void check_thread_support(int provided) {
-    if (DEBUG) printf("%d - THREAD SUPPORT: chcemy %d. Co otrzymamy?\n", datas.rank, provided);
+    if (DEBUG) printf("rank = %d- THREAD SUPPORT: chcemy %d. Co otrzymamy?\n", datas.rank, provided);
     switch (provided) {
     case MPI_THREAD_SINGLE:
         if (DEBUG) printf("Brak wsparcia dla wątków, kończę\n");
@@ -33,6 +34,7 @@ void check_thread_support(int provided) {
     }
 }
 
+//preparing MPI packet from ours defined in structs
 void initType() {
     const int nItems = 3;
     int blockLengths[nItems] = { 1, 1, 1 };
@@ -47,8 +49,9 @@ void initType() {
     MPI_Type_commit(&MPI_PACKET_T);
 }
 
+// every initialisation in one function
 void initApp(int* argc, char*** argv) {
-    if (DEBUG) printf("%d - Application initialization...\n", datas.rank);
+    if (DEBUG) printf("rank = %d - Application initialization...\n", datas.rank);
     int provided;
 
     MPI_Init_thread(argc, argv, MPI_THREAD_MULTIPLE, &provided);
@@ -66,9 +69,10 @@ void initApp(int* argc, char*** argv) {
     pthread_create(&commThread, NULL, commLoop, 0);
 
     Sleep(1000);
-    if (DEBUG) printf("%d - Application ready \n", datas.rank);
+    if (DEBUG) printf("rank = %d - Application ready \n", datas.rank);
 }
 
+// close everything
 void finalizeApp() {
     pthread_join(commThread, NULL);
     MPI_Type_free(&MPI_PACKET_T);
@@ -85,8 +89,8 @@ void unlockStateMutex() {
     pthread_mutex_unlock(&stateMutex);
 }
 
+// heart of the program
 int main(int argc, char** argv) {
-    printf("test\n");
     initApp(&argc, &argv);
     mainLoop();
     finalizeApp();

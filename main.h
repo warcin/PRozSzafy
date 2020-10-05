@@ -7,20 +7,20 @@
 #include <stdio.h>
 #include <windows.h>
 
+//all 3 lines needed for visual studio compiling pthread
 #define HAVE_STRUCT_TIMESPEC
 #include <pthread.h>
-#pragma comment(lib,"pthreadVC2.lib") //for visual studio
+#pragma comment(lib,"pthreadVC2.lib") 
 
 #include "consts.h"
 #include "structs.h"
 
-//#define println(FORMAT, ...) printf("%c[%d;%dm[r = %d][t = %d]: " FORMAT "%c[%d;%dm\n",  27, (1+(datass.rank/7))%2, 31+(6+datass.rank)%7, datass.rank, datass.lamportTime, ##__VA_ARGS__, 27,0,37);
 
-extern Data datas; // full datas set for one process
+extern Data datas; // full data set for one process
 
-extern MPI_Datatype MPI_PACKET_T;
+extern MPI_Datatype MPI_PACKET_T; // our 3 int packet defined in structs
 
-
+// methods on mutex we share between comm and main threads for changing Data datas
 void lockStateMutex();
 void unlockStateMutex();
 
